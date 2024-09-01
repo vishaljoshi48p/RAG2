@@ -1,0 +1,30 @@
+name: Deploy Flask App
+
+on:
+  push:
+    branches:
+      - main  # Adjust this to your default branch if different
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.8'  # Specify your Python version here
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Deploy to Heroku
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}  # Your Heroku API key
+      run: |
+        git remote add heroku https://git.heroku.com/your-heroku-app.git
+        git push heroku main
